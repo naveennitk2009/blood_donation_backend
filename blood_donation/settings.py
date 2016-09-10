@@ -38,7 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'blood_donation'
+    'blood_donation',
+    'rest_framework'
 )
 
 MIDDLEWARE_CLASSES = (
