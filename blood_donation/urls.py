@@ -17,5 +17,5 @@ from django.conf.urls import include, url
 from blood_donation.views import *
 
 urlpatterns = [
-   url(r'/v1/get_started', )
+   url(r'v1/get_started', get_started)
 ]
