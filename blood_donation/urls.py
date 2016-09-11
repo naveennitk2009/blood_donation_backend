@@ -21,5 +21,5 @@ urlpatterns = [
     url(r'v1/signup', signup),
     url(r'v1/new_blood_req', new_blood_req),
     url(r'v1/donor_response', donor_response),
-    url(r'v1/recipeint_feedback', recipeint_feedback),
+    url(r'v1/find_coupon', find_coupon),
 ]

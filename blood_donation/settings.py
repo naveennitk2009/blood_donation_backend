@@ -32,7 +32,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = (
     'blood_donation',
-    'rest_framework'
+    'rest_framework',
+    'elasticsearch'
 )
 
 MIDDLEWARE_CLASSES = ()
