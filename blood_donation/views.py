@@ -52,6 +52,65 @@ def find_coupon(request):
     cat = data.get("cat")
     recipient_id = data.get("recipient_id")
     detail_type = data.get("detail_type")
+    ids_to_remove = []
+    if user_type != "new":
+        new_user_only_search = {
+            "query": {
+                "filtered": {
+                   "query": {
+                       "bool": {
+                            "should": [
+                               {
+                                    "multi_match": {
+                                       "query": "first user",
+                                       "fields": ["description", "short_description"]
+                                    }
+                               },
+                               {
+                                    "multi_match": {
+                                   "query": "new user",
+                                   "fields": ["description", "short_description"]
+                                }
+                               },
+                               {
+                                    "multi_match": {
+                                   "query": "first order",
+                                   "fields": ["description", "short_description"]
+                                }
+                               },
+                               {
+                                    "multi_match": {
+                                   "query": "first purchase",
+                                   "fields": ["description", "short_description"]
+                                }
+                               }
+                            ]
+                       }
+                   },
+                   "filter": {
+                       "bool": {
+                           "should": [
+                              {
+                                  "term": {
+                                     "merchant": mer
+                                  }
+                              },
+                              {
+                                "term":{
+                                     "tags": cat
+                                 }
+                             }
+                           ]
+                       }
+                   }
+                   }
+            }
+        }
+        new_user_only_res = es_client.search(index="coupons_index", doc_type="coupon", body=new_user_only_search)
+        hits = new_user_only_res['hits']['hits']
+        for hit in hits[:2]:
+            ids_to_remove.append(hit['_id'])
+
 
     body = {
         "from": 0,
@@ -98,7 +157,14 @@ def find_coupon(request):
                              "tags": cat
                          }
                      }
-                  ]
+                  ],
+                    "must_not":[
+                        {
+                            "ids": {
+                                "values": ids_to_remove
+                            }
+                        }
+                    ]
                   }
               }
            }
